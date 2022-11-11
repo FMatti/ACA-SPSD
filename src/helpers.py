@@ -1,9 +1,12 @@
 import numpy as np
 from typing import Union
+from itertools import combinations
 
 def argmax_perm(vector : np.ndarray, perm : np.ndarray, start : int) -> int:
     """
     Find maximum argument of permuted vector from an arbitrary starting point.
+
+        idx_max = argmax{vector[perm[j]], j = start, start+1, ..., n-1}
 
     Parameters
     ----------
@@ -18,10 +21,14 @@ def argmax_perm(vector : np.ndarray, perm : np.ndarray, start : int) -> int:
     -------
     idx_max : int
         Maximum index in permuted input vector.
-         = argmax{vector[perm[j]], j = start, start+1, ..., n-1}
     """
+    # Find maximum index in permuted vector
     idx_max_perm = np.argmax(vector[perm[start:]])
+
+    # Find index in permutation vector corresponding to maximum
     idx_max = np.where(perm == perm[start + idx_max_perm])
+
+    # Convert index to integer
     idx_max = idx_max[0].squeeze()
     return idx_max
 
@@ -44,7 +51,7 @@ def swap_entries(vector : np.ndarray, idx1 : int, idx2 : int) -> None:
 
 def volume(matrix : np.ndarray) -> float:
     """
-    Swap two entries in a vector.
+    Compute the volume of a square matrix.
 
     Parameters
     ----------
@@ -58,6 +65,41 @@ def volume(matrix : np.ndarray) -> float:
     """
     vol = abs(np.linalg.det(matrix))
     return vol
+
+def max_volume_index_set(matrix : np.ndarray, k : int) -> np.ndarray:
+    """
+    Get index set of largest volume square submatrix of size k.
+
+        J = argmax{vol(matrix[I, I]), |I| = k}
+
+    Warning
+    -------
+    This function is of complexity O(c(k, n)). Don't use it for n >> k >> 1.
+
+    Parameters
+    ----------
+    matrix : np.ndarray, shape (n, n)
+        Square input matrix.
+    k : int
+        Size of submatrix.
+
+    Returns
+    -------
+    I : np.ndarray
+        Index set of largest volume submatrix.
+    """
+    max_vol = -np.inf
+
+    # Iterate through all possible index sets of size k
+    for I in combinations(range(len(matrix)), k):
+
+        # Memorize index set of maximum volume submatrix
+        if (vol := volume(matrix[np.ix_(I, I)])) > max_vol:
+            max_vol = vol
+            max_I = I
+    # Convert index set to a numpy array
+    J = np.array(max_I)
+    return J
 
 def ACA_approximation(matrix : np.ndarray, I : np.ndarray):
     """

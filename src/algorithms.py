@@ -36,15 +36,21 @@ def ACA_SPSD(A : np.ndarray, k : int) -> np.ndarray:
 
     # Algorithm 1 from [1] on page 431
     for m in range(k):
+
+        # Find argmax{d[pi[j]], j = m, m+1, ..., n-1}
         i = argmax_perm(d, pi, m)
+
+        # Swap entries pi[m] with pi[i]
         swap_entries(pi, m, i)
+
+        # Set entry L[m, pi[m]]
         L[pi[m], m] = pow(d[pi[m]], 0.5)
 
-        for i in range(m+1, n):
-            L[pi[i], m] = (A[pi[m], pi[i]] - L[pi[m]] @ L[pi[i]]) / L[pi[m], m]
-            d[pi[i]] -= pow(L[pi[i], m], 2)
+        # Compute remaining entries in L and update d
+        L[pi[m+1:], m] = (A[pi[m], pi[m+1:]] - L[pi[m+1:]] @ L[pi[m]]) / L[pi[m], m]
+        d[pi[m+1:]] -= L[pi[m+1:], m]**2
 
-    # Selected index set is first k entries in the index permutation vector
+    # Selected index set is first k entries (pivots) in index permutation vector
     I = pi[:k]
     return I
 
