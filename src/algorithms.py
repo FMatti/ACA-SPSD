@@ -56,8 +56,6 @@ def ACA_SPSD(A : np.ndarray, k : int) -> np.ndarray:
     return I
 
 def Algorithm1(A : np.ndarray, k : int) -> np.ndarray:
-    # raise NotImplementedError
-
     """
     Attempts to improve the volume of the submatrix selected by ACA_SPSD
     in order to obtain a better cross approximation
@@ -74,34 +72,32 @@ def Algorithm1(A : np.ndarray, k : int) -> np.ndarray:
     I : np.ndarray, shape (k)
         Improved selection of index set.
     """
-
     n = len(A)
     I = ACA_SPSD(A, k)
-    volume_I = volume(A[np.ix_(I, I)])
 
-    indices = np.arange(1,n)
-    no_changes = True
+    I_bool = np.zeros(n, dtype=bool)
+    I_bool[I] = True
+    volume_I = volume(A[np.ix_(I_bool, I_bool)])
 
-    while no_changes:
-        J = I
-        remaining_indices = [x for x in indices if x not in I]
-        no_changes = False
-        for i in I:
-            for j in remaining_indices:
+    swapped = True
+    while swapped:
+        swapped = False
+        J_bool = I_bool.copy()
+        for i in np.arange(n)[I_bool]:
+            for j in np.arange(n)[~I_bool]:
                 # swapping i and j
-                if j not in J:
-                    J = np.append(J, j) 
-                    J = np.delete(J, np.where(J == i))
-                
-                new_volume = volume(A[np.ix_(J, J)]) 
-                if new_volume > volume_I:
+                J_bool[i] = False
+                J_bool[j] = True
+
+                if (new_volume := volume(A[np.ix_(J_bool, J_bool)])) > volume_I:
                     # update indices if swapping i and j improves volume of selected submatrix
-                    I = J
+                    I_bool = J_bool.copy()
                     volume_I = new_volume
-                    no_changes = True
-                    #print("Updated volume: ", new_volume)
-                else: J = I
+                    swapped = True
+                    break
+                J_bool = I_bool.copy()
+            if swapped:
+                break
 
+    I = np.arange(n)[I_bool]
     return I
-
-        

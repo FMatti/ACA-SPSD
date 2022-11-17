@@ -59,3 +59,23 @@ def get_A3(n):
     """
     A3 = 1 / (np.add.outer(np.arange(1, n+1), np.arange(1, n+1)) - 1)
     return A3
+
+def get_A4(epsilon=1e-1):
+    """
+    Obtain the matrix A_4 used as a counter example for Task 4.
+
+    Parameters
+    ----------
+    epsilon : float, optional, default is 1e-1
+        Parameter used to control "non-orthonormality" of first two columns.
+
+    Returns
+    -------
+    A4 : np.ndarray, shape (n, n)
+        The generated matrix.
+    """
+    A4 = np.array([[1, epsilon, 0, 0],
+                   [epsilon, 1, 0, 0],
+                   [0, 0, pow(2, -0.5), pow(2, -0.5)],
+                   [0, 0, pow(2, -0.5), -pow(2, -0.5)]])
+    return A4

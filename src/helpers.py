@@ -124,7 +124,7 @@ def ACA_approximation(matrix : np.ndarray, I : np.ndarray):
     return matrix_approximation
 
 
-def ACA_error(matrix : np.ndarray, I : np.ndarray, ord : Union[str, int] = 'fro') -> float:
+def ACA_error(matrix : np.ndarray, I : np.ndarray, ord : Union[str, int] = np.inf) -> float:
     """
     Error of cross approximation.
 
@@ -135,12 +135,40 @@ def ACA_error(matrix : np.ndarray, I : np.ndarray, ord : Union[str, int] = 'fro'
     I : np.ndarray, shape (k)
         Selected index set from cross approximation.
     ord : {non-zero int, inf, -inf, 'fro', 'nuc'}, optional
-        Order of the norm. 
+        Order of the norm.
 
     Returns
     -------
-    vol : float
-        Volume of the input matrix.
+    error : float
+        Error of the cross approximation of the input matrix.
     """
-    norm = np.linalg.norm(matrix - ACA_approximation(matrix, I), ord=ord)
-    return norm
+    if ord == 'max':
+        error = np.max(np.abs(matrix - ACA_approximation(matrix, I)))
+    else:
+        error = np.linalg.norm(matrix - ACA_approximation(matrix, I), ord=ord)
+    return error
+
+def ACA_upper_bounds(matrix : np.ndarray, k_max : int) -> np.ndarray:
+    """
+    Compute the theoretical upper bounds on the ACA for k = 1, ..., k_max.
+
+        upper_bounds(k) = (k + 1)*sigma_{k+1}(matrix)
+
+    Parameters
+    ----------
+    matrix : np.ndarray, shape (n, n)
+        Symmetric positive semidefinite matrix.
+    k_max : int
+        Cardinality of the input matrix.
+    
+    Returns
+    -------
+    upper_bounds : np.ndarray
+        Theoretical upper bounds on the ACA for k = 1, ..., k_max.
+    singular_values : np.ndarray
+        The first k_max singular values of the matrix.
+    """
+    singular_values = np.linalg.svd(matrix, compute_uv = False)
+    upper_bounds = (np.arange(1,k_max+1) + 1)*singular_values[1:(k_max+1)]
+    return upper_bounds, singular_values[:k_max]
+
