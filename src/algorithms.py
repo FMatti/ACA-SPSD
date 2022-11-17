@@ -1,6 +1,7 @@
 import numpy as np
 
 from src.helpers import argmax_perm, swap_entries
+from src.helpers import volume
 
 def ACA_SPSD(A : np.ndarray, k : int) -> np.ndarray:
     """
@@ -55,4 +56,52 @@ def ACA_SPSD(A : np.ndarray, k : int) -> np.ndarray:
     return I
 
 def Algorithm1(A : np.ndarray, k : int) -> np.ndarray:
-    raise NotImplementedError
+    # raise NotImplementedError
+
+    """
+    Attempts to improve the volume of the submatrix selected by ACA_SPSD
+    in order to obtain a better cross approximation
+
+     Parameters
+    ----------
+    A : np.nbdarray, shape (n, n)
+        Symmetric positive semidefinite matrix.
+    k : int, 0 < k <= n
+        Number of indices to select.
+
+    Returns
+    -------
+    I : np.ndarray, shape (k)
+        Improved selection of index set.
+    """
+
+    n = len(A)
+    I = ACA_SPSD(A, k)
+    volume_I = volume(A[np.ix_(I, I)])
+
+    indices = np.arange(1,n)
+    no_changes = True
+
+    while no_changes:
+        J = I
+        remaining_indices = [x for x in indices if x not in I]
+        no_changes = False
+        for i in I:
+            for j in remaining_indices:
+                # swapping i and j
+                if j not in J:
+                    J = np.append(J, j) 
+                    J = np.delete(J, np.where(J == i))
+                
+                new_volume = volume(A[np.ix_(J, J)]) 
+                if new_volume > volume_I:
+                    # update indices if swapping i and j improves volume of selected submatrix
+                    I = J
+                    volume_I = new_volume
+                    no_changes = True
+                    #print("Updated volume: ", new_volume)
+                else: J = I
+
+    return I
+
+        
