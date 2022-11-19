@@ -67,15 +67,15 @@ def get_A4(epsilon=1e-1):
     Parameters
     ----------
     epsilon : float, optional, default is 1e-1
-        Parameter used to control "non-orthonormality" of first two columns.
+        Parameter used to control "non-orthonormality" of first submatrix.
 
     Returns
     -------
     A4 : np.ndarray, shape (n, n)
         The generated matrix.
     """
-    A4 = np.array([[1, epsilon, 0, 0],
-                   [epsilon, 1, 0, 0],
-                   [0, 0, pow(2, -0.5), pow(2, -0.5)],
-                   [0, 0, pow(2, -0.5), -pow(2, -0.5)]])
+    A4 = np.array([[1, epsilon, epsilon, epsilon],
+                   [epsilon, 1, epsilon, epsilon],                
+                   [epsilon, epsilon, 1, 0],
+                   [epsilon, epsilon, 0, 1]])
     return A4
