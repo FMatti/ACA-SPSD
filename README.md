@@ -1,5 +1,8 @@
 # ACA-SPSD
 
+In this repository we provide the implementation of the project "Volume maximization for cross approximation" of the class Low-Rank Approximation Techiques, MATH-403
+Authors: Fabio Matti, Anna Paulish
+
 ## Instructions
 
 Clone the repository
