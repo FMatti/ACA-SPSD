@@ -18,7 +18,7 @@ source .venv/bin/activate (on Linux, macOS)
 
 Install the required packages
 ```[bash]
-pip update --install pip
+pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
