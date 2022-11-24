@@ -10,7 +10,7 @@ def get_A1(n, theta=0.3):
         Size of the matrix A_1
     theta : float, optional (default is 0.3)
         Angular parameter used in generating the matrix.
-    
+
     Returns
     -------
     A1 : np.ndarray, shape (n, n)
@@ -31,7 +31,7 @@ def get_A2(n, seed=0):
         Size of the matrix A_1
     seed : int, optional (default is 0)
         The seed used to generate random matrix.
-    
+
     Returns
     -------
     A2 : np.ndarray, shape (n, n)
@@ -51,7 +51,7 @@ def get_A3(n):
     ----------
     n : int, n > 0
         Size of the matrix A_1
-    
+
     Returns
     -------
     A3 : np.ndarray, shape (n, n)
@@ -75,7 +75,7 @@ def get_A4(epsilon=1e-1):
         The generated matrix.
     """
     A4 = np.array([[1, epsilon, epsilon, epsilon],
-                   [epsilon, 1, epsilon, epsilon],                
+                   [epsilon, 1, epsilon, epsilon],
                    [epsilon, epsilon, 1, 0],
                    [epsilon, epsilon, 0, 1]])
     return A4

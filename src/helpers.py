@@ -53,6 +53,8 @@ def volume(matrix : np.ndarray) -> float:
     """
     Compute the volume of a square matrix.
 
+        vol = |det(matrix)|
+
     Parameters
     ----------
     matrix : np.ndarray, shape (n, n)
@@ -103,7 +105,9 @@ def max_volume_index_set(matrix : np.ndarray, k : int) -> np.ndarray:
 
 def ACA_approximation(matrix : np.ndarray, I : np.ndarray):
     """
-    Error of cross approximation.
+    Cross approximation.
+
+        matrix_approx = matrix[:,I] matrix[I,I]^{-1} matrix[I,:]
 
     Parameters
     ----------
@@ -114,19 +118,21 @@ def ACA_approximation(matrix : np.ndarray, I : np.ndarray):
 
     Returns
     -------
-    matrix_approximation : np.ndarray, shape (n, n)
+    matrix_approx : np.ndarray, shape (n, n)
         The approximation of the matrix using cross approximation.
     """
     C = matrix[:, I]
     U_inv = matrix[np.ix_(I, I)]
     R = matrix[I, :]
-    matrix_approximation = C @ np.linalg.solve(U_inv,  R)
-    return matrix_approximation
+    matrix_approx = C @ np.linalg.solve(U_inv,  R)
+    return matrix_approx
 
 
 def ACA_error(matrix : np.ndarray, I : np.ndarray, ord : Union[str, int] = np.inf) -> float:
     """
     Error of cross approximation.
+
+        error = ||matrix - matrix[:,I] matrix[I,I]^{-1} matrix[I,:]||
 
     Parameters
     ----------
@@ -160,7 +166,7 @@ def ACA_upper_bounds(matrix : np.ndarray, k_max : int) -> np.ndarray:
         Symmetric positive semidefinite matrix.
     k_max : int
         Cardinality of the input matrix.
-    
+
     Returns
     -------
     upper_bounds : np.ndarray

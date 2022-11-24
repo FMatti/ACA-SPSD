@@ -9,7 +9,7 @@ def ACA_SPSD(A : np.ndarray, k : int) -> np.ndarray:
 
     Parameters
     ----------
-    A : np.nbdarray, shape (n, n)
+    A : np.ndarray, shape (n, n)
         Symmetric positive semidefinite matrix.
     k : int, 0 < k <= n
         Number of indices to select.
@@ -62,7 +62,7 @@ def Algorithm1(A : np.ndarray, k : int) -> np.ndarray:
 
      Parameters
     ----------
-    A : np.nbdarray, shape (n, n)
+    A : np.ndarray, shape (n, n)
         Symmetric positive semidefinite matrix.
     k : int, 0 < k <= n
         Number of indices to select.
