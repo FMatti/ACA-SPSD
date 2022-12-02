@@ -38,7 +38,7 @@ def get_A2(n, seed=0):
         The generated matrix.
     """
     np.random.seed(seed)
-    d = np.arange(1, n+1)
+    d = np.arange(1, n+1, dtype=float)**-2
     Q, _ = np.linalg.qr(np.random.randn(n, n))
     A2 = Q @ np.diag(d) @ Q.T
     return A2
